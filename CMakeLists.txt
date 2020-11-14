@@ -2,7 +2,7 @@
 ### Mini Assets ###
 ###################
 cmake_minimum_required(VERSION 3.9.2)
-project(MiniAssets VERSION 0.0.1 DESCRIPTION "An expandable framework for sharing and managing application assets.")
+project(MiniAssets VERSION 0.1.0 DESCRIPTION "An expandable framework for sharing and managing application assets.")
 include(ExternalProject)
 
 # Set mandatory requirements

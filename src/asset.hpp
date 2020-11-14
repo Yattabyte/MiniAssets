@@ -34,9 +34,7 @@ class Asset {
     /// \brief  Attaches a callback for when the asset finishes loading.
     /// \param	alive		a shared bool indicating whether the caller is
     /// still. \param	callback	the method to be triggered.
-    void addCallback(
-        const std::shared_ptr<bool>& alive,
-        const AssetFinalizedCallback& callback);
+    void addCallback(const std::shared_ptr<bool>& alive, const AssetFinalizedCallback& callback);
     ///////////////////////////////////////////////////////////////////////////
     /// \brief  Retrieves whether or not this asset has completed finalizing.
     /// \return	true if this asset has finished finalizing, false otherwise.
@@ -50,8 +48,7 @@ class Asset {
     /// \return				true if all the assets have finished finalizing,
     /// false otherwise.
     template <typename FirstAsset, typename... RemainingAssets>
-    static bool All_Ready(
-        const FirstAsset& firstAsset, const RemainingAssets&... rest) noexcept {
+    static bool All_Ready(const FirstAsset& firstAsset, const RemainingAssets&... rest) noexcept {
         // Ensure all inputs are shared assets
         static_assert(
             !std::is_base_of<std::shared_ptr<Asset>, FirstAsset>::value,

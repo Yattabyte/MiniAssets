@@ -12,9 +12,8 @@ using namespace mini;
 ///////////////////////////////////////////////////////////////////////////
 
 Shared_Asset AssetManager::shareAsset(
-    const std::string& assetType, const std::string& filename,
-    const std::function<Shared_Asset(void)>& constructor,
-    const bool& threaded) {
+    const std::string& assetType, const std::string& filename, const std::function<Shared_Asset(void)>& constructor,
+    const bool threaded) {
     // Find out if the asset already exists
     std::shared_lock<std::shared_mutex> asset_read_guard(m_mutexAssetMap);
     for (const auto& asset : m_assetMap[assetType])
@@ -40,8 +39,7 @@ Shared_Asset AssetManager::shareAsset(
 
     // Initialize now or later, depending if we are threading this order or not
     if (threaded) {
-        std::unique_lock<std::shared_mutex> worker_write_guard(
-            m_mutexWorkorders);
+        std::unique_lock<std::shared_mutex> worker_write_guard(m_mutexWorkorders);
         m_workOrders.emplace_back(std::bind(&Asset::initialize, asset));
     } else
         asset->initialize();
@@ -71,8 +69,7 @@ void AssetManager::beginWorkOrder() {
 /// submitNotifyee
 ///////////////////////////////////////////////////////////////////////////
 
-void AssetManager::submitNotifyee(
-    const std::pair<std::shared_ptr<bool>, std::function<void()>>& callBack) {
+void AssetManager::submitNotifyee(const std::pair<std::shared_ptr<bool>, std::function<void()>>& callBack) {
     std::unique_lock<std::shared_mutex> writeGuard(m_mutexNofications);
     m_notifyees.push_back(callBack);
 }
@@ -82,8 +79,7 @@ void AssetManager::submitNotifyee(
 ///////////////////////////////////////////////////////////////////////////
 
 void AssetManager::notifyObservers() {
-    std::vector<std::pair<std::shared_ptr<bool>, std::function<void()>>>
-        copyNotifyees;
+    std::vector<std::pair<std::shared_ptr<bool>, std::function<void()>>> copyNotifyees;
     {
         std::unique_lock<std::shared_mutex> writeGuard(m_mutexNofications);
         copyNotifyees = m_notifyees;
@@ -105,10 +101,9 @@ bool AssetManager::readyToUse() {
         return false;
 
     readGuard = std::shared_lock<std::shared_mutex>(m_mutexAssetMap);
-    return std::all_of(
-        m_assetMap.begin(), m_assetMap.end(), [](const auto& assetCategory) {
-            return std::all_of(
-                assetCategory.second.cbegin(), assetCategory.second.cend(),
-                [](const auto& asset) { return asset->ready(); });
+    return std::all_of(m_assetMap.begin(), m_assetMap.end(), [](const auto& assetCategory) {
+        return std::all_of(assetCategory.second.cbegin(), assetCategory.second.cend(), [](const auto& asset) {
+            return asset->ready();
         });
+    });
 }

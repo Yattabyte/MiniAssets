@@ -28,18 +28,15 @@ class AssetManager {
     /// \param  threaded		flag to create in a separate thread.
     /// \return the asset, if found, or nullptr otherwise.
     [[nodiscard]] Shared_Asset shareAsset(
-        const std::string& assetType, const std::string& filename,
-        const std::function<Shared_Asset(void)>& constructor,
-        const bool& threaded);
+        const std::string& assetType, const std::string& filename, const std::function<Shared_Asset(void)>& constructor,
+        const bool threaded);
     ///////////////////////////////////////////////////////////////////////////
     /// \brief Pop's the first work order and completes it. */
     void beginWorkOrder();
     ///////////////////////////////////////////////////////////////////////////
     /// \brief Forwards notification callbacks for the main-thread.
     /// \param  callback        the callback parameters.
-    void submitNotifyee(
-        const std::pair<std::shared_ptr<bool>, std::function<void()>>&
-            callback);
+    void submitNotifyee(const std::pair<std::shared_ptr<bool>, std::function<void()>>& callback);
     ///////////////////////////////////////////////////////////////////////////
     /// \brief  Calls all relevant finalization callbacks.
     /// \note   Call only from the main thread!
@@ -52,14 +49,12 @@ class AssetManager {
     private:
     ///////////////////////////////////////////////////////////////////////////
     /// Private Attributes
-    std::shared_mutex m_mutexAssetMap; ///< Mutex for the asset map.
-    std::map<std::string, std::vector<Shared_Asset>>
-        m_assetMap;                            ///< Container for assets.
-    std::shared_mutex m_mutexWorkorders;       ///< Mutex for asset work orders.
-    std::deque<Asset_Work_Order> m_workOrders; ///< Container for work orders.
-    std::shared_mutex m_mutexNofications;      ///< Mutex for notifications.
-    std::vector<std::pair<std::shared_ptr<bool>, std::function<void()>>>
-        m_notifyees; ///< Container for notifications.
+    std::shared_mutex m_mutexAssetMap;                                                ///< Mutex for the asset map.
+    std::map<std::string, std::vector<Shared_Asset>> m_assetMap;                      ///< Container for assets.
+    std::shared_mutex m_mutexWorkorders;                                              ///< Mutex for asset work orders.
+    std::deque<Asset_Work_Order> m_workOrders;                                        ///< Container for work orders.
+    std::shared_mutex m_mutexNofications;                                             ///< Mutex for notifications.
+    std::vector<std::pair<std::shared_ptr<bool>, std::function<void()>>> m_notifyees; ///< Container for notifications.
 };
 };     // namespace mini
 #endif // MINI_ASSETMANAGER_HPP
